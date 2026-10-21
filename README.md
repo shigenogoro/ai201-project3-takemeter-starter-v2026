@@ -44,6 +44,10 @@
 
 **Community:** [r/hockey](https://old.reddit.com/r/hockey), Reddit's public general NHL discussion board. Its posts range from stat-backed analysis to one-line reactions in game threads.
 
+TakeMeter sorts r/hockey comments into four kinds of take: `analysis` (a claim backed by a checkable fact), `hot_take` (an arguable position with no support), `reaction` (emotional venting), and `joke` (a pure bit). It's a DistilBERT model fine-tuned on 301 labelled comments from 21 threads. The point is to tell a stat-backed argument apart from noise in a sub where both look the same at a glance.
+
+**Stretch feature:** `joke` is a fourth label. I added it because r/hockey has a lot of pure bits ("Larkin for Hellebuyck. The trade is one for one.") that none of the three base labels describe.
+
 **Candidate distinctions (from reading 67 comments across three threads: the Sharks jersey-ad thread, the Larkin trade-list thread, and the MTL @ WSH game thread from Oct 14 2026):**
 1. **Some comments cite a specific, checkable fact. Most don't.** *"He's legit under 32% this season"* (Jack Hughes on faceoffs) and *"Utah just traded for Trocheck, Devils top two centres are both better than Larkin"* point at something you could look up. *"None of those teams want him"* states a claim just as confidently and gives nothing to check.
 2. **Some comments are pure feeling, with no claim at all.** *"Ugh cardiac caps are back at it again. Need to close out games cleanly"* and *"We stay above 50 😮‍💨"* react to what just happened without arguing anything. The game thread is almost entirely this kind of comment ("gg Habs", "GG Caps bros"). Its bot comments (Chatterstats, highlight links) aren't human posts and shouldn't be collected.
@@ -121,45 +125,42 @@ If the post is mainly venting how the poster feels, it's `reaction`, even when i
 <!-- Where you collected from, how you labelled, your counts, and three hard
      cases. -->
 
-**Where the posts came from:**
+**Where the posts came from:** Comments from 21 public r/hockey threads posted Oct 14–20, 2026, collected with a Playwright script that read each thread's page as it loaded (about 30 top comments per thread). I picked the threads to cover every label: stat posts (5v5 xGoal share, team 5v5 records), contract and trade threads (DeBrincat's deal, the price for Larkin, Larkin's trade list, Marchenko, Hellebuyck), highlight and penalty clips (Makar's hit, Dobeš's OT penalty, Parayko "using the force"), a game thread, and lighter threads where jokes cluster (the Hellebuyck comedian bit, the Devils' train-schedule troll, the "Stamkoses" plural). From 654 comments after removing bots, deleted comments, and duplicates, I kept 301. I dropped replies that don't make sense without their parent ("Yes 👍", "He doesn't"), plain questions, non-English comments, and off-topic tangents.
 
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
-Say so plainly — the disclosure is required, not penalised. -->
+**How I labelled them:** Claude labelled all 301 rows using my four definitions and both decision rules, and the `note` column says so on every row. I did not do the unaided cold pass of 20 rows the brief asks for. The 20 rows that were set aside for it are noted `labelled by Claude (no unaided cold pass was done)`. That means this file is not evidence of how consistently *I* apply my own taxonomy. The staff-set agreement check next unit is the only independent check I'll have.
 
 **Counts per label:**
 
 | Label | Count | Share |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+| `analysis` | 47 | 15.6% |
+| `hot_take` | 82 | 27.2% |
+| `reaction` | 85 | 28.2% |
+| `joke` | 87 | 28.9% |
+| **Total** | 301 | 100% |
 
 **Three hard cases**
 
-<!-- Any post that made you pause: what it was, which two labels it could have
-     been, and what you chose. These are worth more than the easy 190. -->
-
 **1.**
-> *The post:*
+> *The post:* "I'm always expecting goals, but we don't actually score them. Jack shoots more than anyone, but only has two goals."
 >
-> *Could have been:*
+> *Could have been:* `reaction` or `analysis`
 >
-> *I chose, because:*
+> *Claude chose `analysis`, because:* it opens as venting, but "shoots more than anyone, only two goals" is a checkable fact doing real work in the point being made.
 
 **2.**
-> *The post:*
+> *The post:* "Imo, when comparing analytics success vs standings success, All Situations is the more appropriate metric than 5v5. Otherwise, you're removing special teams from the equation, when special teams performance absolutely contributes to standings success."
 >
-> *Could have been:*
+> *Could have been:* `analysis` or `hot_take`
 >
-> *I chose, because:*
+> *Claude chose `hot_take`, because:* it's a careful, reasoned argument, but it cites nothing checkable. My `analysis` definition requires a fact, not just reasoning. This case shows a real gap in my taxonomy: a well-argued post without data lands in the same bucket as "None of those teams want him."
 
 **3.**
-> *The post:*
+> *The post:* "Stunning and brave to have all the teams that have won the cup in the 2020s on your list."
 >
-> *Could have been:*
+> *Could have been:* `joke` or `hot_take`
 >
-> *I chose, because:*
+> *Claude chose `hot_take`, because:* under my sarcasm rule, a sarcastic post gets the label of what it's saying underneath. Underneath, this is a verdict that Larkin is only willing to join contenders. It isn't a pure bit.
 
 ---
 
@@ -169,17 +170,24 @@ Say so plainly — the disclosure is required, not penalised. -->
 
 **Device:** `cpu`. My laptop has no NVIDIA GPU (Windows 11, Python 3.12.6, PyTorch 2.14.1+cpu, 63.7 GB RAM). `python test.py` passed 10/10 on 2026-10-20, and the baseline model is already downloaded.
 
-**Base model:**
+**Base model:** `distilbert-base-uncased`
 
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Settings:** 3 epochs, learning rate 2e-5, batch size 16, max length 128 tokens, seed 42. Training took about 5 minutes on CPU.
 
-**Anything I changed from the defaults, and why:**
+**Anything I changed from the defaults, and why:** Nothing in the hyperparameters. The only edits to the notebook were `LABELS = ["analysis", "hot_take", "reaction", "joke"]` (to add the fourth label) and my name in section 1. One environment fix: an expired Hugging Face login token cached on my machine made the public model download fail with a 401. I ran the training with `HF_HUB_DISABLE_IMPLICIT_TOKEN=1` so that no token was sent.
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+**Split sizes:** train 210 · val 45 · test 46
 
+| Label | Train | Val | Test |
+|---|---|---|---|
+| `analysis` | 33 | 7 | 7 |
+| `hot_take` | 57 | 12 | 13 |
+| `reaction` | 59 | 13 | 13 |
+| `joke` | 61 | 13 | 13 |
 
+`analysis` has only 7 examples in the test split, under the notebook's threshold of about 8, so its F1 will swing a lot between seeds.
+
+**First run (seed 42, from `results.json`):** accuracy 0.478, macro F1 0.368. I haven't read these against `criteria.md` yet; that's next unit's work.
 
 ---
 
@@ -202,9 +210,9 @@ of next unit's variance. -->
 
 - *What I asked for:* For Claude to write my five acceptance criteria and the reasons behind each number. The project brief says not to do this, and I'm disclosing that I did.
 - *What came back:* A draft of `criteria.md` covering accuracy (0.60), per-label F1 (0.55, with 0.35 for `joke`), balance (40% max, 12% min), confidence (a 0.20 gap between the most- and least-confident thirds), and agreement with the staff set (0.80).
-- *What I changed:* <!-- fill in: which numbers or reasons you checked, changed, or kept, and why -->
+- *What I changed:* Nothing. I kept all five numbers and reasons as Claude drafted them.
 
-**Pre-labelling disclosure:**
+**Pre-labelling disclosure:** Claude collected the comments from r/hockey with Playwright, chose 301 of them, and labelled all 301 using my four definitions and two decision rules. I did not do an unaided cold pass, and I did not correct the labels row by row. Every row's `note` column says it was labelled by Claude.
 
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
