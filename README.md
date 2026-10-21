@@ -60,33 +60,55 @@
      The decision rule is worth a point on its own and it's the thing most
      people leave out. Every taxonomy has a hardest boundary. Name yours. -->
 
-### `label_one`
+### `analysis`
 
-**Definition:**
-
-**Example 1:**
->
-
-**Example 2:**
->
-
-### `label_two`
-
-**Definition:**
+**Definition:** Makes a claim and backs it with at least one specific, checkable fact: a stat, a transaction, a roster detail, or a named source.
 
 **Example 1:**
->
+> One thing to note on NJ. Jack currently isn't taking faceoffs this game and Nico, Erod, or Glass are taking them. Olympics and 4 Nations he played wing and there's been multiple seasons where coaches had someone else take his faceoffs. As much as we call him our 1 or 2 C dude fucking sucks and is a liability at faceoffs. He's legit under 32% this season. There's a growing consensus amongst Devils fans for years that Jack needs to be move to wing full time since it's clear he's not getting better at it.
 
 **Example 2:**
->
+> Of these new teams, I feel like they're all still tough fits? Utah just traded for Trocheck, Devils top two centres are both better than Larkin, Avs are stacked down the middle, Canes probably chill to test Stankoven at 2C…..good luck buddy
+
+### `hot_take`
+
+**Definition:** A confident claim about players, teams, or the league that stands on its own beyond the current moment and offers nothing checkable to support it.
+
+**Example 1:**
+> None of those teams want him
+
+**Example 2:**
+> I blame Adam Silver and the NBA for starting this.
+
+### `reaction`
+
+**Definition:** An immediate emotional response to something that just happened (a goal, a result, a piece of news) that isn't trying to persuade anyone.
+
+**Example 1:**
+> We stay above 50 😮‍💨
+
+**Example 2:**
+> Ugh cardiac caps are back at it again. Need to close out games cleanly
+
+### `joke`
+
+**Definition:** Written mainly to get a laugh through sarcasm, an absurd hypothetical, or a bit, and misread if taken literally.
+
+**Example 1:**
+> you know what be really funny? "Larkin for Hellebuyck. The trade is one for one."
+
+**Example 2:**
+> Sharks brand/marketing person when they see this post: "Guys, I have an idea"
 
 ### The hardest boundary
 
-**Which two labels:**
+**Which two labels:** `reaction` vs `hot_take`
+
+**The borderline post:**
+> Habs (and Dobes) gave that game away.
 
 **The decision rule I used every time:**
-<!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
-     if the tone is heated." -->
+If the post responds to something that just happened and isn't trying to persuade anyone, it's `reaction`, even when it contains a judgment ("Dobes gave that game away"). It's `hot_take` only when the claim stands on its own outside the moment, meaning it would still read as an argument a week later ("None of those teams want him").
 
 
 
