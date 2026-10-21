@@ -42,6 +42,12 @@
 <!-- Your community, and what your classifier sorts posts into. Three or four
      sentences. -->
 
+**Community:** [r/hockey](https://old.reddit.com/r/hockey), Reddit's public general NHL discussion board. Its posts range from stat-backed analysis to one-line reactions in game threads.
+
+**Candidate distinctions (from reading 72 comments across three threads: the Sharks jersey-ad thread, the Larkin trade-list thread, and the Kindel medical-episode thread):**
+1. **Some comments cite a specific, checkable fact. Most don't.** *"He's legit under 32% this season"* (Jack Hughes on faceoffs) and *"Utah just traded for Trocheck, Devils top two centres are both better than Larkin"* point at something you could look up. *"None of those teams want him"* states a claim just as confidently and gives nothing to check.
+2. **Some comments are pure feeling, with no claim at all.** *"Fuck that's terrifying. Glad he was reported to be stable"* and *"Rooting for you, Kindy ❤️"* react to the news without arguing anything. The Kindel thread is almost entirely this kind of comment.
+3. **Some comments are jokes, not claims or feelings.** *"Larkin for Hellebuyck. The trade is one for one."* and *"3 > 8 > 10... might get to 15 by Christmas at this rate."* exist to get a laugh, and taking them literally misreads them.
 
 
 ---
@@ -136,6 +142,8 @@ Say so plainly — the disclosure is required, not penalised. -->
 ## The Training Run
 
 <!-- Your starting model, your settings, and anything you changed and why. -->
+
+**Device:** `cpu`. My laptop has no NVIDIA GPU (Windows 11, Python 3.12.6, PyTorch 2.14.1+cpu, 63.7 GB RAM). `python test.py` passed 10/10 on 2026-10-20, and the baseline model is already downloaded.
 
 **Base model:**
 
