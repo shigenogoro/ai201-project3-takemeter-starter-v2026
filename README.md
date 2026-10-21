@@ -44,9 +44,9 @@
 
 **Community:** [r/hockey](https://old.reddit.com/r/hockey), Reddit's public general NHL discussion board. Its posts range from stat-backed analysis to one-line reactions in game threads.
 
-**Candidate distinctions (from reading 72 comments across three threads: the Sharks jersey-ad thread, the Larkin trade-list thread, and the Kindel medical-episode thread):**
+**Candidate distinctions (from reading 67 comments across three threads: the Sharks jersey-ad thread, the Larkin trade-list thread, and the MTL @ WSH game thread from Oct 14 2026):**
 1. **Some comments cite a specific, checkable fact. Most don't.** *"He's legit under 32% this season"* (Jack Hughes on faceoffs) and *"Utah just traded for Trocheck, Devils top two centres are both better than Larkin"* point at something you could look up. *"None of those teams want him"* states a claim just as confidently and gives nothing to check.
-2. **Some comments are pure feeling, with no claim at all.** *"Fuck that's terrifying. Glad he was reported to be stable"* and *"Rooting for you, Kindy ❤️"* react to the news without arguing anything. The Kindel thread is almost entirely this kind of comment.
+2. **Some comments are pure feeling, with no claim at all.** *"Ugh cardiac caps are back at it again. Need to close out games cleanly"* and *"We stay above 50 😮‍💨"* react to what just happened without arguing anything. The game thread is almost entirely this kind of comment ("gg Habs", "GG Caps bros"). Its bot comments (Chatterstats, highlight links) aren't human posts and shouldn't be collected.
 3. **Some comments are jokes, not claims or feelings.** *"Larkin for Hellebuyck. The trade is one for one."* and *"3 > 8 > 10... might get to 15 by Christmas at this rate."* exist to get a laugh, and taking them literally misreads them.
 
 
