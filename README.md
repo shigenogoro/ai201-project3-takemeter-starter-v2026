@@ -72,7 +72,7 @@
 
 ### `hot_take`
 
-**Definition:** A confident claim about players, teams, or the league that stands on its own beyond the current moment and offers nothing checkable to support it.
+**Definition:** Takes a position someone could argue against (a prediction, a ranking, a verdict on a player or trade) and offers nothing checkable to support it.
 
 **Example 1:**
 > None of those teams want him
@@ -82,7 +82,7 @@
 
 ### `reaction`
 
-**Definition:** An immediate emotional response to something that just happened (a goal, a result, a piece of news) that isn't trying to persuade anyone.
+**Definition:** Emotional venting (cheering, frustration, disgust, relief) about a play, a result, the news, or the league, with no argument behind it.
 
 **Example 1:**
 > We stay above 50 😮‍💨
@@ -92,7 +92,7 @@
 
 ### `joke`
 
-**Definition:** Written mainly to get a laugh through sarcasm, an absurd hypothetical, or a bit, and misread if taken literally.
+**Definition:** A pure bit written to get a laugh (an absurd hypothetical, a fake quote, a meme format) with no real complaint or claim underneath.
 
 **Example 1:**
 > you know what be really funny? "Larkin for Hellebuyck. The trade is one for one."
@@ -108,7 +108,9 @@
 > Habs (and Dobes) gave that game away.
 
 **The decision rule I used every time:**
-If the post responds to something that just happened and isn't trying to persuade anyone, it's `reaction`, even when it contains a judgment ("Dobes gave that game away"). It's `hot_take` only when the claim stands on its own outside the moment, meaning it would still read as an argument a week later ("None of those teams want him").
+If the post is mainly venting how the poster feels, it's `reaction`, even when it contains a judgment ("Dobes gave that game away", "Jersey ads are the worst thing to happen to this league in 20 years"). It's `hot_take` when the post takes a position someone could argue against, such as a prediction, a ranking, or a verdict on a trade ("None of those teams want him", "Larkin to Minnesota is the only trade that makes sense").
+
+**Second rule (sarcasm):** A sarcastic complaint or claim gets the label of what it's actually saying underneath. "Of course the Caps blow a two-goal lead. Never change, boys." is `reaction`. `joke` is only for pure bits with nothing underneath, like "Larkin for Hellebuyck. The trade is one for one."
 
 
 

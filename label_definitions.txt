@@ -6,6 +6,6 @@
 # Delete the examples below and put yours in.
 
 analysis: makes a claim and backs it with at least one specific, checkable fact: a stat, a transaction, a roster detail, or a named source
-hot_take: a confident claim about players, teams, or the league that stands on its own beyond the current moment and offers nothing checkable to support it
-reaction: an immediate emotional response to something that just happened (a goal, a result, a piece of news) that isn't trying to persuade anyone
-joke: written mainly to get a laugh through sarcasm, an absurd hypothetical, or a bit, and misread if taken literally
+hot_take: takes a position someone could argue against (a prediction, a ranking, a verdict on a player or trade) and offers nothing checkable to support it
+reaction: emotional venting (cheering, frustration, disgust, relief) about a play, a result, the news, or the league, with no argument behind it
+joke: a pure bit written to get a laugh (an absurd hypothetical, a fake quote, a meme format) with no real complaint or claim underneath
