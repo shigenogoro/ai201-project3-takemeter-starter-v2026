@@ -194,15 +194,15 @@ of next unit's variance. -->
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* For Claude to stress-test my four labels by writing eight posts that sit on the boundaries between them. I classified the posts myself without seeing any intended answers.
+- *What came back:* Eight boundary posts. Four of my labels contradicted my own written definitions. I'd called "Jersey ads are the worst thing to happen to this league in 20 years" a `reaction` even though nothing had just happened, and I never picked `joke`, even for sarcastic posts.
+- *What I changed:* I redefined `reaction` as emotional venting rather than a response to something that just happened, narrowed `joke` to pure bits, rewrote the `reaction` vs `hot_take` rule around venting vs taking a position, and added a second rule that sarcasm gets the label of what it's saying underneath.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* For Claude to write my five acceptance criteria and the reasons behind each number. The project brief says not to do this, and I'm disclosing that I did.
+- *What came back:* A draft of `criteria.md` covering accuracy (0.60), per-label F1 (0.55, with 0.35 for `joke`), balance (40% max, 12% min), confidence (a 0.20 gap between the most- and least-confident thirds), and agreement with the staff set (0.80).
+- *What I changed:* <!-- fill in: which numbers or reasons you checked, changed, or kept, and why -->
 
 **Pre-labelling disclosure:**
 

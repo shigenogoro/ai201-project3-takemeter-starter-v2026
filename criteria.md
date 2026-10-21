@@ -51,63 +51,43 @@ whether you hit them:
 
 ---
 
-## 1.
+## 1. Overall accuracy
 
-<!-- Your criterion. It must name a number. -->
+Accuracy on the held-out test split is **at least 0.60 on each of the three seeds**.
 
-
-
-**Why this target:**
-
-
+**Why this target:** With four labels, random guessing gets 0.25. Criterion 3 caps my biggest label at 40%, so a model that always guesses that label scores at most 0.40. 0.60 sits 20 points above that floor, which is the point where I'd trust it to sort a thread better than skimming it. It isn't higher because the test split is only about 30 posts: one post is worth 0.033, and the floor has to hold on the worst of three seeds, not the average.
 
 ---
 
-## 2.
+## 2. Per-label performance
 
-<!-- Your criterion. -->
+`analysis`, `hot_take`, and `reaction` each have an **F1 of at least 0.55**, and `joke` has an **F1 of at least 0.35**, on each of the three seeds.
 
-
-
-**Why this target:**
-
-
+**Why this target:** The three main labels should each have about 50 or more examples, so about 8 or more land in the test split, enough for an F1 that doesn't swing wildly. 0.55 is a little below the overall target because per-label F1 is noisier than accuracy. `joke` gets a looser number because it will be my thinnest label (maybe 25 to 30 posts, so about 4 in test, where one miss moves the F1 by roughly 0.2). Under my sarcasm rule it also only covers pure bits, which makes it the hardest label to learn from text alone. I still set it well above 0, because a label the model never gets right isn't really in the taxonomy.
 
 ---
 
-## 3.
+## 3. Balance
 
-<!-- Your criterion. -->
+In `labels.csv`, **no label is above 40% of the rows and no label is below 12%**.
 
-
-
-**Why this target:**
-
-
+**Why this target:** r/hockey game threads are almost entirely "gg" and venting, so `reaction` will crowd out everything else unless I hold it back on purpose. The course cap is 70%, but at 70% a model can score 0.70 by always guessing one label, which would make criterion 1 meaningless. 40% keeps that shortcut below my accuracy target. The 12% floor is 24 of 200 posts, about 4 in the test split, the fewest I think can produce an F1 that means anything at all.
 
 ---
 
-## 4.
+## 4. Confidence
 
-<!-- Your criterion. -->
+On each of the three seeds, accuracy on the model's **most-confident third** of test posts is **at least 0.20 higher** than on its **least-confident third** (`accuracy_most_confident_third − accuracy_least_confident_third ≥ 0.20` in `results.json`).
 
-
-
-**Why this target:**
-
-
+**Why this target:** If I ever use this to sort posts, I'd only want to trust the confident predictions, so confidence has to mean something. Each third is about 10 posts, so the gap moves in steps of 0.10. 0.20 means at least two more correct posts in the confident third. That's small enough to clear if confidence works at all, and big enough that one lucky post can't fake it.
 
 ---
 
-## 5.
+## 5. Consistency
 
-<!-- Your criterion. -->
+When I label the 30 staff posts under the staff taxonomy, my **agreement rate is at least 0.80** (at most 6 disagreements out of 30), as reported by `agreement.py`.
 
-
-
-**Why this target:**
-
-
+**Why this target:** This is my only outside check on whether I apply a written rule the way its author meant. The staff `analysis` and `hot_take` definitions are close to mine, so those should mostly match. Their `reaction` is time-based ("just happened") and mine is about venting, a habit I'll have to unlearn for those 30 posts. I'm allowing 6 misses for that. Below 24 of 30, I'd doubt that my own 200 labels were applied consistently either.
 
 ---
 
