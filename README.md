@@ -403,21 +403,48 @@ None can be listed until the staff key arrives. The two template slots below are
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** One training setting: `EPOCHS = 3` → `EPOCHS = 10` in notebook section 2. Everything else is unchanged: same `labels.csv`, same seeds 42/7/2024 and so the same splits, lr 2e-5, batch 16, max length 128. `RUN_LABEL = "after"` writes `results_three_seeds_after.json`. Each seed took 16–24 minutes on CPU.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** The undertraining finding in Verdicts and Diagnoses. After 3 epochs, training loss was 1.28–1.32 (random guessing over four labels scores ln 4 = 1.386), and mean confidence when right was 0.30–0.32. The brief says to change a training setting only when the diagnosis points at training. Here it did, and it was the only cause I could test without new data.
 
 ### Run Log — After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. Overall accuracy | ≥ 0.60 | 0.543 | 0.543 | 0.587 | **MISSED** |
+| 2. Per-label F1 (an / ht / re / jk) | ≥ 0.55 / 0.55 / 0.55 / 0.35 | 0.31 / 0.48 / 0.59 / 0.67 | 0.57 / 0.50 / 0.67 / 0.40 | 0.63 / 0.46 / 0.64 / 0.64 | **MISSED** |
+| 3. Balance in `labels.csv` (max / min share) | ≤ 40% / ≥ 12% | 28.9% / 15.6% | 28.9% / 15.6% | 28.9% / 15.6% | **MET** |
+| 4. Confidence gap (most-sure third − least-sure third) | ≥ 0.20 | 0.533 | 0.200 | 0.267 | **MET** |
+| 5. Agreement with staff set | ≥ 0.80 | not measured | not measured | not measured | **NOT MEASURED** |
 
-**Did it help, and how do I know:**
+Criterion 4 on seed 7 is exactly 0.200: 10 of 15 right in the most-sure third against 7 of 15 in the least-sure. That's three more correct posts, which is the bar `criteria.md` sets, so it counts as met, with no margin.
+
+| Measure | Seed 42 | Seed 7 | Seed 2024 | Spread |
+|---|---|---|---|---|
+| Overall accuracy | 0.543 | 0.543 | 0.587 | 0.043 |
+| Macro F1 | 0.512 | 0.535 | 0.591 | 0.080 |
+| F1 — `analysis` | 0.308 | 0.571 | 0.625 | 0.317 |
+| F1 — `hot_take` | 0.480 | 0.500 | 0.462 | 0.038 |
+| F1 — `reaction` | 0.593 | 0.667 | 0.643 | 0.074 |
+| F1 — `joke` | 0.667 | 0.400 | 0.636 | 0.267 |
+
+Confusion matrix after, seed 42:
+
+| true \ predicted | analysis | hot_take | reaction | joke |
+|---|---|---|---|---|
+| **analysis** | 2 | 5 | 0 | 0 |
+| **hot_take** | 4 | 6 | 2 | 1 |
+| **reaction** | 0 | 1 | 8 | 4 |
+| **joke** | 0 | 0 | 4 | 9 |
+
+**Did it help, and how do I know:** Yes, though not enough to meet criteria 1 and 2.
+- **Accuracy:** up on every seed (+0.065, +0.152, +0.109). The spread halved, from 0.087 to 0.043.
+- **Macro F1:** up 0.14–0.26.
+- **`analysis`:** went from never predicted to F1 0.31–0.63.
+- **Criterion 4:** went from MISSED to MET.
+- **Training loss:** fell to 0.86–0.92, so the model is no longer guessing.
+
+The cost is `hot_take`. On seed 42 its F1 fell from 0.69 to 0.48, because the model no longer dumps every uncertain post into it. Before, its high recall was a symptom, not a skill. The biggest confusion is now `analysis` ↔ `hot_take` in both directions (5 and 4), which is the boundary my taxonomy defines by a single checkable fact.
 
 <!-- If it didn't, say so. Relabelling that didn't help is a genuinely
      interesting result and earns full credit. -->
