@@ -328,7 +328,21 @@ Seed 42 (the same split as the baseline table):
      data/staff_taxonomy.md, not your own — so every argument below is made
      from those definitions and those decision rules. -->
 
-**Agreement rate:** ___ / 30 = ___%
+**Agreement rate:** not measured. I don't have the answer key, `data/staff_labels.csv`, which the TF hands out, so `agreement.py` can't run and there is no `agreement_results.json`. My 30 labels are in `my_staff_labels.csv`, and the comparison runs as soon as the key is in `data/`.
+
+**How my 30 were labelled:** Claude labelled them, one post at a time, under `data/staff_taxonomy.md` only (not my r/hockey definitions), before any staff label had been seen. They came out 10 `analysis` / 10 `hot_take` / 10 `reaction`, in id order (sp_001–010, sp_011–020, sp_021–030). That suggests staff grouped the file by label, which makes it a weaker blind test than it looks.
+
+**The posts I expect to disagree on, and how I argued them in advance:**
+
+| Post | My label | Rival label | Why mine, from the staff rules |
+|---|---|---|---|
+| sp_005 "Carbon plates aren't the whole story. My times dropped 2%…" | `analysis` | `hot_take` | Rule 1: the second 2% (same shoes, more mileage) *is* the argument against "shoes are the whole story". It isn't decoration. |
+| sp_007 "Ran the same loop in 4C and in 24C… 90 seconds slower" | `analysis` | `reaction` | Rule 3: it's about the writer's own run, but the 90-second gap carries a general claim about heat. |
+| sp_010 "Three of us ran the same session… within 10 seconds" | `analysis` | `hot_take` | The 10-second spread is the whole argument ("smaller than the noise"). |
+| sp_014 "Times are down about 3% since the shoe rules changed, so obviously…" | `hot_take` | `analysis` | Rule 1 almost word for word: the 3% decorates a conclusion already reached. |
+| sp_017 "Road racing peaked in about 2015…" | `hot_take` | `analysis` | "2015" is a date, but nothing is argued from it. |
+| sp_018 "Track sessions are wasted on anyone running slower than 8 minute miles" | `hot_take` | `analysis` | The pace is a threshold in the claim, not evidence for it. |
+| sp_027 "Wind was so bad… leaning at about 20 degrees" | `reaction` | `hot_take` | Rule 2: it reports what just happened to the writer. |
 
 <!-- Nobody grades this number. A 60% who argues every disagreement from the
      stated rules beats a 95% who wrote "staff was right" nine times. Several
@@ -336,6 +350,8 @@ Seed 42 (the same split as the baseline table):
      winning some of these. -->
 
 **Disagreements**
+
+None can be listed until the staff key arrives. The two template slots below are left in place for that.
 
 <!-- Three lines each: the post, both labels, and who you think is right and
      why — grounded in the staff definitions you were both applying.
@@ -368,7 +384,7 @@ Seed 42 (the same split as the baseline table):
 >
 > *Which pile:*
 
-**What the pattern in my disagreements tells me:**
+**What the pattern in my disagreements tells me:** Nothing yet, and that matters for the diagnoses below. Without this report I have no instrument that can tell a labelling problem from a model problem.
 
 
 
