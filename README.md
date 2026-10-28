@@ -256,11 +256,11 @@ Both columns are scored on the same 46 posts in `test_split.csv` (seed 42). The 
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1. Overall accuracy | ≥ 0.60 | 0.478 | 0.391 | 0.478 | |
-| 2. Per-label F1 (an / ht / re / jk) | ≥ 0.55 / 0.55 / 0.55 / 0.35 | 0.00 / 0.69 / 0.30 / 0.48 | 0.00 / 0.49 / 0.50 / 0.13 | 0.00 / 0.57 / 0.46 / 0.47 | |
-| 3. Balance in `labels.csv` (max / min share) | ≤ 40% / ≥ 12% | 28.9% / 15.6% | 28.9% / 15.6% | 28.9% / 15.6% | |
-| 4. Confidence gap (most-sure third − least-sure third) | ≥ 0.20 | 0.267 | 0.533 | 0.067 | |
-| 5. Agreement with staff set | ≥ 0.80 | not measured | not measured | not measured | |
+| 1. Overall accuracy | ≥ 0.60 | 0.478 | 0.391 | 0.478 || **MISSED** |
+| 2. Per-label F1 (an / ht / re / jk) | ≥ 0.55 / 0.55 / 0.55 / 0.35 | 0.00 / 0.69 / 0.30 / 0.48 | 0.00 / 0.49 / 0.50 / 0.13 | 0.00 / 0.57 / 0.46 / 0.47 || **MISSED** |
+| 3. Balance in `labels.csv` (max / min share) | ≤ 40% / ≥ 12% | 28.9% / 15.6% | 28.9% / 15.6% | 28.9% / 15.6% || **MET** |
+| 4. Confidence gap (most-sure third − least-sure third) | ≥ 0.20 | 0.267 | 0.533 | 0.067 || **MISSED** |
+| 5. Agreement with staff set | ≥ 0.80 | not measured | not measured | not measured || **NOT MEASURED** |
 
 **Spread across seeds** (notebook section 6):
 
@@ -299,13 +299,24 @@ Seed 42 (the same split as the baseline table):
 
 | # | Criterion | Target | Verdict | How I decided |
 |---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| 1 | Overall accuracy | ≥ 0.60 on each seed | **MISSED** | Best seed was 0.478, 12 points short. No seed came close. |
+| 2 | Per-label F1 | an/ht/re ≥ 0.55, joke ≥ 0.35, on each seed | **MISSED** | `analysis` is 0.00 on all three seeds. `reaction` is under 0.55 on all three. `joke` drops to 0.13 on seed 7. Only `hot_take` clears its bar, on seeds 42 and 2024. |
+| 3 | Balance | max ≤ 40%, min ≥ 12% | **MET** | Computed from `labels.csv` (joke 28.9%, analysis 15.6%). It doesn't depend on the seed. |
+| 4 | Confidence gap | ≥ 0.20 on each seed | **MISSED** | 0.267 and 0.533 clear it, but seed 2024 is 0.067. The target has to hold on all three, so one passing pair isn't enough. |
+| 5 | Agreement with staff set | ≥ 0.80 | **NOT MEASURED** | There's no `data/staff_labels.csv`, so `agreement.py` can't run. This is not a revision: the criterion is fine as written, the instrument just isn't available. `criteria.md` is unchanged. |
 
 **Diagnoses**
+
+**The main finding: the model is undertrained, which pushes the other causes into the background.** After 3 epochs, training loss is 1.28–1.32 and validation loss is 1.31. A model that guesses uniformly over four labels scores ln 4 = 1.386, so it has barely moved off random. Mean confidence on its *correct* predictions is 0.30–0.32, against 0.25 for uniform. Every miss below is partly this, and it's the one cause I can test without new data, which is why Milestone 5 targets it.
+
+**Criterion 1 (accuracy):** The cause is undertraining plus one dead label. `analysis` is 15% of every test split (7 of 46), and the model never predicts it, so the most any seed can reach is about 0.85. The rest of the loss comes from `reaction` and `joke` blurring together (see criterion 2). Evidence: the loss and confidence numbers above, and the `analysis` column of the matrix, which is zero on every seed.
+
+**Criterion 2 (per-label F1):**
+- *`analysis` = 0.00 on every seed.* Two causes: **too few examples** and **a genuinely hard pair**. It's my thinnest label (33 training posts, against 57–61 for the others). Across the three seeds, 18 of its 21 test posts went to `hot_take`. That fits the boundary: an `analysis` post is a `hot_take` plus one checkable fact ("Utah just traded for Trocheck"), and DistilBERT has to spot that one clause. An undertrained model falls back on the bigger, overlapping class. *(My criterion 2 reasoning predicted `joke` would be the thin label. It turned out to be the biggest. The reasoning was wrong, but the target is still measurable, so I haven't revised it.)*
+- *`reaction` ↔ `joke`.* On seed 42, 8 `reaction` posts were called `joke`. On seeds 7 and 2024 the error runs the other way (8 and 6 `joke` posts called `reaction`). An error that flips direction with the split is more likely a hard boundary, or one labelled inconsistently, than a learned bias. My sarcasm rule ("a sarcastic complaint is `reaction`") puts dry, jokey-sounding venting into `reaction`, which makes the two look alike on the surface.
+- *Labelling vs. model: what I can't say.* The brief says the agreement report is the instrument for telling a labelling problem from a model problem. I don't have it (criterion 5). And all 301 labels were applied by Claude, with no cold pass by me. So I **cannot** rule out that the `reaction`/`joke` boundary was applied two ways in `labels.csv`. What I can say: the `analysis` failure is one-directional and consistent across seeds, which points at data size and the boundary rather than noisy labels.
+
+**Criterion 4 (confidence):** The cause is the same undertraining. Each third is 15 posts, so the gap moves in steps of 0.067, and on seed 2024 it is a single step. When the top prediction averages 0.30–0.32, the difference between "confident" and "unsure" is a few hundredths of probability. Sorting on that is close to sorting at random, so the gap swings 0.07 to 0.53 across seeds. The criterion is fine as written; the model just doesn't produce confidences yet.
 
 <!-- For each miss: the cause, and how you know. The four common causes are:
      too few examples for a label, a boundary you applied inconsistently, a
