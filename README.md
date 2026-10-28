@@ -214,6 +214,12 @@ If the post is mainly venting how the poster feels, it's `reaction`, even when i
 
 **Pre-labelling disclosure:** Claude collected the comments from r/hockey with Playwright, chose 301 of them, and labelled all 301 using my four definitions and two decision rules. I did not do an unaided cold pass, and I did not correct the labels row by row. Every row's `note` column says it was labelled by Claude.
 
+**Unit 6: what Claude did:**
+- *Ran the work:* Claude (Claude Code) ran all of unit 6 for me: both baseline runs, the before and after three-seed runs (the notebook's code cells, executed with the project `.venv`), and the README write-ups.
+- *Labelled the staff set:* Claude labelled all 30 posts in `my_staff_labels.csv` under the staff taxonomy. I did not label them myself.
+- *Read the error patterns:* Claude spotted the pattern behind the diagnosis. Training loss sat at about 1.32, close to the ln 4 = 1.386 of random guessing, and confidence was near-uniform. That pointed the improvement at epochs rather than at relabelling. It also noticed that the `reaction` ↔ `joke` error flips direction between seeds.
+- *What I'd change:* the verdicts and diagnoses are Claude's reading of the numbers. Before submitting, I should check each verdict myself, especially criterion 4 on seed 7, which passes at exactly 0.200.
+
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
      Don't fill these in during unit 5.
@@ -457,11 +463,20 @@ The cost is `hot_take`. On seed 42 its F1 fell from 0.69 to 0.48, because the mo
 
 <!-- For each criterion still missed: what you'd do, and why you stopped. -->
 
+**Criterion 1 (accuracy ≥ 0.60, after: 0.543 / 0.543 / 0.587):** Still missed, by 1–3 posts per seed.
+- *What I'd do next:* add about 30 more `analysis` posts. It's still the thinnest label (33 in training), and its errors now feed directly into the `analysis` ↔ `hot_take` confusion.
+- *Why I stopped:* collecting new comments needs the Playwright scraper, and it wasn't connected in this session. The brief also allows one change per round, and the epochs change had already used it.
 
+**Criterion 2 (per-label F1, after: `hot_take` 0.46–0.50, `analysis` 0.31 on seed 42):** Still missed.
+- *What I'd do next:* relabel the `analysis`/`hot_take` boundary once, consistently: does a checkable fact carry the claim, or only decorate it? (That's the staff rule 1 idea, which my own definition doesn't spell out.) The more `analysis` examples above would help here too.
+- *Why I stopped:* the agreement report is the instrument that would tell me whether this boundary was applied two ways in `labels.csv`, and I don't have the staff key. Relabelling without that evidence would be a guess.
+
+**Criterion 5 (agreement, not measured):** This becomes measurable as soon as `data/staff_labels.csv` arrives: run `python agreement.py`, then adjudicate each disagreement in the Agreement Report.
+- *Why I stopped:* the file has to come from the TF, and it isn't in the repo.
 
 **The gap between what I meant my labels to capture and what the model
 learned:**
-<!-- Two sentences. Your confusion matrix is the evidence. -->
+I meant `analysis` to mean "a claim carried by a checkable fact." After 10 epochs the model still sends 5 of 7 seed-42 `analysis` posts to `hot_take` (and 4 `hot_take` posts the other way), so it has learned "an opinion about hockey" and not whether a fact is doing the work. Likewise, `reaction` vs. `joke` was meant to separate venting from pure bits, but 4 posts cross each way on seed 42, so the model reads the shared tone of casual game-thread talk rather than whether there's a real complaint underneath, which is the exact distinction my sarcasm rule draws.
 
 
 
