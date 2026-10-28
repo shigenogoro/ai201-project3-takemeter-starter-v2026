@@ -252,29 +252,41 @@ Both columns are scored on the same 46 posts in `test_split.csv` (seed 42). The 
 <!-- Five criteria across three seeds. The notebook's section 6 prints the
      spread table; the Target and Verdict columns are yours. -->
 
+**Device:** `cpu` (CPU, torch 2.14.1+cpu, max length 128), recorded in `results_three_seeds_before.json`. Settings were unchanged from unit 5: 3 epochs, lr 2e-5, batch 16. Each seed took about 7 minutes. Seed 42 reproduced unit 5's `results.json` exactly.
+
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. Overall accuracy | ≥ 0.60 | 0.478 | 0.391 | 0.478 | |
+| 2. Per-label F1 (an / ht / re / jk) | ≥ 0.55 / 0.55 / 0.55 / 0.35 | 0.00 / 0.69 / 0.30 / 0.48 | 0.00 / 0.49 / 0.50 / 0.13 | 0.00 / 0.57 / 0.46 / 0.47 | |
+| 3. Balance in `labels.csv` (max / min share) | ≤ 40% / ≥ 12% | 28.9% / 15.6% | 28.9% / 15.6% | 28.9% / 15.6% | |
+| 4. Confidence gap (most-sure third − least-sure third) | ≥ 0.20 | 0.267 | 0.533 | 0.067 | |
+| 5. Agreement with staff set | ≥ 0.80 | not measured | not measured | not measured | |
+
+**Spread across seeds** (notebook section 6):
+
+| Measure | Seed 42 | Seed 7 | Seed 2024 | Spread |
+|---|---|---|---|---|
+| Overall accuracy | 0.478 | 0.391 | 0.478 | 0.087 |
+| Macro F1 | 0.368 | 0.278 | 0.376 | 0.098 |
+| F1 — `analysis` | 0.000 | 0.000 | 0.000 | 0.000 |
+| F1 — `hot_take` | 0.688 | 0.486 | 0.571 | 0.201 |
+| F1 — `reaction` | 0.300 | 0.500 | 0.462 | 0.200 |
+| F1 — `joke` | 0.485 | 0.125 | 0.471 | 0.360 |
+
+Accuracy moved 0.087, under the ten-point warning line. But per-label F1 moved 0.20–0.36, so the label-level numbers are much less stable than the headline one.
 
 ### Confusion matrix
 
-<!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
-     An image of a matrix earns nothing. -->
+Seed 42 (the same split as the baseline table):
 
-| true \ predicted |  |  |  |
-|---|---|---|---|
-| **** |  |  |  |
-| **** |  |  |  |
-| **** |  |  |  |
+| true \ predicted | analysis | hot_take | reaction | joke |
+|---|---|---|---|---|
+| **analysis** | 0 | 5 | 0 | 2 |
+| **hot_take** | 0 | 11 | 0 | 2 |
+| **reaction** | 0 | 2 | 3 | 8 |
+| **joke** | 0 | 1 | 4 | 8 |
 
-**My biggest off-diagonal number, and what it means:**
-<!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
-     direction. "7 real analysis posts were called hot_take and only 3 went the
-     other way" is a direction, not just an error rate. -->
+**My biggest off-diagonal number, and what it means:** 8 real `reaction` posts were called `joke`, and 4 went the other way. So the model hasn't learned the venting-vs-bit boundary, and on seed 42 it leans toward `joke`. That direction isn't stable, though. On seeds 7 and 2024 it flips: 8 and 6 real `joke` posts were called `reaction`. The stable fact is that `analysis` is never predicted on any seed, and 18 of its 21 test posts across the three seeds went to `hot_take`.
 
 
 
