@@ -226,20 +226,22 @@ If the post is mainly venting how the poster feels, it's `reaction`, even when i
 <!-- Both models on the same posts. `python baseline.py --trained results.json`
      prints this table for you. -->
 
+Both columns are scored on the same 46 posts in `test_split.csv` (seed 42). The baseline is `facebook/bart-large-mnli` zero-shot, prompted with the four definitions in `label_definitions.txt`.
+
 | Measure | Baseline | Trained | Difference |
 |---|---|---|---|
-| Overall accuracy |  |  |  |
-| Macro F1 |  |  |  |
-| F1 — `label_one` |  |  |  |
-| F1 — `label_two` |  |  |  |
+| Overall accuracy | 0.152 | 0.478 | +0.326 |
+| Macro F1 | 0.066 | 0.368 | +0.302 |
+| F1 — `analysis` | 0.264 | 0.000 | -0.264 |
+| F1 — `hot_take` | 0.000 | 0.688 | +0.688 |
+| F1 — `joke` | 0.000 | 0.485 | +0.485 |
+| F1 — `reaction` | 0.000 | 0.300 | +0.300 |
 
-**What I predicted before I looked:**
-<!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
-     prediction made afterwards isn't one. -->
+**Definitions vs. bare label names:** I ran the baseline twice. With the bare label names only (no `label_definitions.txt`), it scored **accuracy 0.283, macro F1 0.191** (F1: analysis 0.000, hot_take 0.333, joke 0.000, reaction 0.432). With my definitions it scored **0.152**. So my definitions were worth **−0.13 accuracy** to the zero-shot model. The table above reports the definitions run, as the brief asks.
 
-**What the gap actually means:**
-<!-- If the baseline matched your trained model, your fine-tuning added
-     nothing — and that is a real finding, not a failure. Say it plainly. -->
+**What I predicted before I looked:** The trained model will beat the baseline on `hot_take` and `joke`, because those labels depend on r/hockey's tone and a general model has never seen it, and it will not beat it on `analysis`. *(Honesty note: the seed-42 `results.json` from unit 5 was already on disk when I wrote this, and it shows `analysis` F1 = 0.000. So this isn't a blind prediction.)*
+
+**What the gap actually means:** Fine-tuning added a lot. The trained model is 33 points more accurate, and it beats the baseline on three of four labels. But the baseline is a weak opponent. With my definitions it called almost everything `analysis`: my `analysis` definition is the only one full of concrete nouns ("stat, transaction, roster detail, named source"), and an NLI model treats any hockey comment as loosely entailing that. Even with bare names it only reached 0.283, barely above the 0.25 you'd get by guessing at random. The one place the baseline wins is `analysis`, and that's the label my trained model never predicts at all.
 
 
 
